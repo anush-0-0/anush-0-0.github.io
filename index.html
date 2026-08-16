@@ -5,9 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Little Latch — A Breastfeeding & New Mom Journal</title>
 <meta name="description" content="Gentle, practical guidance for breastfeeding and early motherhood.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23C98474'/%3E%3C/svg%3E">
+<meta property="og:title" content="Little Latch — A Breastfeeding & New Mom Journal">
+<meta property="og:description" content="Gentle, practical guidance for breastfeeding and early motherhood.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-brand"><span class="mark"></span> Little Latch</a>
+    <div class="nav-links">
+      <a href="#posts">Journal</a>
+      <a href="#about">About</a>
+      <a href="admin.html" class="nav-cta">Dashboard</a>
+    </div>
+  </div>
+</nav>
 
 <header class="hero">
   <div class="wrap">
@@ -17,10 +31,17 @@
     <svg class="wave-divider" viewBox="0 0 300 24" preserveAspectRatio="none">
       <path d="M0 12 Q 25 2, 50 12 T 100 12 T 150 12 T 200 12 T 250 12 T 300 12" />
     </svg>
+    <div class="author-strip">
+      <div class="author-avatar"></div>
+      <div>
+        <div class="name">Written by a mom, for moms</div>
+        <div class="role">Real experience, no fluff</div>
+      </div>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="posts">
   <div id="posts-container">
     <div class="empty-state">Loading posts…</div>
   </div>
@@ -30,8 +51,16 @@
   </div>
 </main>
 
-<footer>
-  <div class="wrap">Little Latch · Built with care · Content edited via the admin dashboard</div>
+<footer id="about">
+  <div class="wrap">
+    <div class="footer-brand">Little Latch</div>
+    <p class="footer-tag">A gentle corner of the internet for new mothers navigating breastfeeding, sleepless nights, and everything in between.</p>
+    <div class="footer-links">
+      <a href="index.html">Journal</a>
+      <a href="admin.html">Dashboard</a>
+    </div>
+    <div class="footer-fine">© 2026 Little Latch · Built with care</div>
+  </div>
 </footer>
 
 <script>
@@ -49,15 +78,22 @@ async function loadPosts() {
     // newest first
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    container.innerHTML = posts.map(post => `
+    container.innerHTML = posts.map(post => {
+      const words = post.content.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(words / 200));
+      return `
       <article class="post-card">
-        <div class="post-date">${new Date(post.date).toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})}</div>
+        <div class="post-meta-row">
+          <div class="post-date">${new Date(post.date).toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})}</div>
+          <div class="read-time">${minutes} min read</div>
+        </div>
         <h2>${escapeHtml(post.title)}</h2>
         ${post.image ? `<img src="${escapeAttr(post.image)}" alt="${escapeAttr(post.title)}">` : ''}
         <div class="post-content">${escapeHtml(post.content)}</div>
         ${post.link ? `<a class="external-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">Read more →</a>` : ''}
       </article>
-    `).join('');
+    `;
+    }).join('');
   } catch (e) {
     container.innerHTML = '<div class="empty-state">Could not load posts yet. If this is a brand new site, add your first post from the <a href="admin.html">admin dashboard</a>.</div>';
   }

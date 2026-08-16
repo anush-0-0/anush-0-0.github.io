@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Little Latch — A Breastfeeding & New Mom Journal</title>
+<meta name="description" content="Gentle, practical guidance for breastfeeding and early motherhood.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">A journal for new mothers</div>
+    <h1 class="site-title">Little Latch</h1>
+    <p class="tagline">Gentle, honest guidance on breastfeeding, newborn days, and everything nobody tells you the first time around.</p>
+    <svg class="wave-divider" viewBox="0 0 300 24" preserveAspectRatio="none">
+      <path d="M0 12 Q 25 2, 50 12 T 100 12 T 150 12 T 200 12 T 250 12 T 300 12" />
+    </svg>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="posts-container">
+    <div class="empty-state">Loading posts…</div>
+  </div>
+
+  <div class="ad-slot" id="ad-slot-1">
+    Ad space — connect AdSense or your ad network here
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Little Latch · Built with care · Content edited via the admin dashboard</div>
+</footer>
+
+<script>
+async function loadPosts() {
+  const container = document.getElementById('posts-container');
+  try {
+    const res = await fetch('posts.json?_=' + Date.now());
+    const posts = await res.json();
+
+    if (!posts.length) {
+      container.innerHTML = '<div class="empty-state">No posts yet. Add your first one from the <a href="admin.html">admin dashboard</a>.</div>';
+      return;
+    }
+
+    // newest first
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    container.innerHTML = posts.map(post => `
+      <article class="post-card">
+        <div class="post-date">${new Date(post.date).toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})}</div>
+        <h2>${escapeHtml(post.title)}</h2>
+        ${post.image ? `<img src="${escapeAttr(post.image)}" alt="${escapeAttr(post.title)}">` : ''}
+        <div class="post-content">${escapeHtml(post.content)}</div>
+        ${post.link ? `<a class="external-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">Read more →</a>` : ''}
+      </article>
+    `).join('');
+  } catch (e) {
+    container.innerHTML = '<div class="empty-state">Could not load posts yet. If this is a brand new site, add your first post from the <a href="admin.html">admin dashboard</a>.</div>';
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+function escapeAttr(str) {
+  return String(str).replace(/"/g, '&quot;');
+}
+
+loadPosts();
+</script>
+
+</body>
+</html>

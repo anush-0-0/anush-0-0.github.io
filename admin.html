@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Little Latch — Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap admin-shell">
+    <div class="eyebrow">Admin</div>
+    <h1 class="site-title" style="font-size:34px;">Dashboard</h1>
+    <p class="tagline">Add posts, edit them, and link out to other pages. Changes publish straight to your live site.</p>
+  </div>
+</header>
+
+<main class="wrap admin-shell">
+
+  <div class="admin-panel" id="setup-panel">
+    <h2>1 · Connect to your GitHub repo</h2>
+    <label for="gh-owner">GitHub username</label>
+    <input type="text" id="gh-owner" placeholder="e.g. janedoe">
+    <label for="gh-repo">Repository name</label>
+    <input type="text" id="gh-repo" placeholder="e.g. janedoe.github.io">
+    <label for="gh-token">Personal access token</label>
+    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxx">
+    <button onclick="saveConnection()">Connect</button>
+    <div class="status-msg" id="connect-status"></div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:14px;">
+      Your token is stored only in this browser (localStorage) — it is never sent anywhere except directly to GitHub's own API. Don't share this admin.html link publicly, since anyone with your token can edit the repo. Need a token? Go to GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic) → check the "repo" box.
+    </p>
+  </div>
+
+  <div class="admin-panel" id="posts-panel" style="display:none;">
+    <h2>2 · Your posts</h2>
+    <div id="posts-list"></div>
+  </div>
+
+  <div class="admin-panel" id="editor-panel" style="display:none;">
+    <h2 id="editor-heading">3 · Add a new post</h2>
+    <input type="hidden" id="edit-id">
+    <label for="p-title">Title</label>
+    <input type="text" id="p-title" placeholder="Post title">
+    <label for="p-image">Image URL (optional)</label>
+    <input type="url" id="p-image" placeholder="https://...">
+    <label for="p-content">Content</label>
+    <textarea id="p-content" placeholder="Write your post here..."></textarea>
+    <label for="p-link">External link (optional)</label>
+    <input type="url" id="p-link" placeholder="https://example.com/related-page">
+    <div>
+      <button onclick="savePost()">Publish post</button>
+      <button class="secondary" onclick="resetEditor()">Clear</button>
+    </div>
+    <div class="status-msg" id="save-status"></div>
+  </div>
+
+</main>
+
+<script>
+const API = 'https://api.github.com';
+let state = { owner: '', repo: '', token: '', posts: [], sha: null };
+
+function loadConnection() {
+  const saved = localStorage.getItem('ll_admin_conn');
+  if (saved) {
+    const c = JSON.parse(saved);
+    document.getElementById('gh-owner').value = c.owner || '';
+    document.getElementById('gh-repo').value = c.repo || '';
+    document.getElementById('gh-token').value = c.token || '';
+    state.owner = c.owner; state.repo = c.repo; state.token = c.token;
+    if (c.owner && c.repo && c.token) fetchPosts();
+  }
+}
+
+function saveConnection() {
+  state.owner = document.getElementById('gh-owner').value.trim();
+  state.repo = document.getElementById('gh-repo').value.trim();
+  state.token = document.getElementById('gh-token').value.trim();
+  localStorage.setItem('ll_admin_conn', JSON.stringify(state));
+  fetchPosts();
+}
+
+async function ghFetch(path, options = {}) {
+  const res = await fetch(`${API}/repos/${state.owner}/${state.repo}${path}`, {
+    ...options,
+    headers: {
+      'Authorization': `Bearer ${state.token}`,
+      'Accept': 'application/vnd.github+json',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`GitHub API error (${res.status}): ${body}`);
+  }
+  return res.json();
+}
+
+async function fetchPosts() {
+  const statusEl = document.getElementById('connect-status');
+  statusEl.textContent = 'Connecting…';
+  statusEl.className = 'status-msg';
+  try {
+    const data = await ghFetch('/contents/posts.json');
+    state.sha = data.sha;
+    const content = decodeURIComponent(escape(atob(data.content)));
+    state.posts = JSON.parse(content);
+    statusEl.textContent = 'Connected ✓';
+    statusEl.className = 'status-msg ok';
+    document.getElementById('posts-panel').style.display = 'block';
+    document.getElementById('editor-panel').style.display = 'block';
+    renderPostsList();
+  } catch (e) {
+    statusEl.textContent = 'Could not connect: ' + e.message;
+    statusEl.className = 'status-msg err';
+  }
+}
+
+function renderPostsList() {
+  const list = document.getElementById('posts-list');
+  if (!state.posts.length) {
+    list.innerHTML = '<p style="color:var(--ink-soft);">No posts yet — add your first one below.</p>';
+    return;
+  }
+  list.innerHTML = state.posts
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(p => `
+      <div class="existing-post">
+        <span>${escapeHtml(p.title)}</span>
+        <span>
+          <button class="secondary" style="margin:0 6px 0 0;padding:6px 14px;" onclick="editPost('${p.id}')">Edit</button>
+          <button class="secondary" style="margin:0;padding:6px 14px;" onclick="deletePost('${p.id}')">Delete</button>
+        </span>
+      </div>
+    `).join('');
+}
+
+function editPost(id) {
+  const p = state.posts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('edit-id').value = p.id;
+  document.getElementById('p-title').value = p.title;
+  document.getElementById('p-image').value = p.image || '';
+  document.getElementById('p-content').value = p.content;
+  document.getElementById('p-link').value = p.link || '';
+  document.getElementById('editor-heading').textContent = 'Editing: ' + p.title;
+  window.scrollTo({ top: document.getElementById('editor-panel').offsetTop - 20, behavior: 'smooth' });
+}
+
+function resetEditor() {
+  document.getElementById('edit-id').value = '';
+  document.getElementById('p-title').value = '';
+  document.getElementById('p-image').value = '';
+  document.getElementById('p-content').value = '';
+  document.getElementById('p-link').value = '';
+  document.getElementById('editor-heading').textContent = '3 · Add a new post';
+}
+
+async function savePost() {
+  const id = document.getElementById('edit-id').value;
+  const title = document.getElementById('p-title').value.trim();
+  const image = document.getElementById('p-image').value.trim();
+  const content = document.getElementById('p-content').value.trim();
+  const link = document.getElementById('p-link').value.trim();
+  const statusEl = document.getElementById('save-status');
+
+  if (!title || !content) {
+    statusEl.textContent = 'Title and content are required.';
+    statusEl.className = 'status-msg err';
+    return;
+  }
+
+  if (id) {
+    const p = state.posts.find(x => x.id === id);
+    Object.assign(p, { title, image, content, link });
+  } else {
+    state.posts.push({
+      id: Date.now().toString(),
+      title, image, content, link,
+      date: new Date().toISOString().slice(0, 10)
+    });
+  }
+
+  statusEl.textContent = 'Publishing…';
+  statusEl.className = 'status-msg';
+
+  try {
+    const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(state.posts, null, 2))));
+    const result = await ghFetch('/contents/posts.json', {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: id ? `Update post: ${title}` : `Add post: ${title}`,
+        content: newContent,
+        sha: state.sha
+      })
+    });
+    state.sha = result.content.sha;
+    statusEl.textContent = 'Published ✓ — live on your site now.';
+    statusEl.className = 'status-msg ok';
+    renderPostsList();
+    resetEditor();
+  } catch (e) {
+    statusEl.textContent = 'Failed to publish: ' + e.message;
+    statusEl.className = 'status-msg err';
+  }
+}
+
+async function deletePost(id) {
+  if (!confirm('Delete this post? This cannot be undone.')) return;
+  state.posts = state.posts.filter(p => p.id !== id);
+  try {
+    const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(state.posts, null, 2))));
+    const result = await ghFetch('/contents/posts.json', {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: 'Delete post',
+        content: newContent,
+        sha: state.sha
+      })
+    });
+    state.sha = result.content.sha;
+    renderPostsList();
+  } catch (e) {
+    alert('Failed to delete: ' + e.message);
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+loadConnection();
+</script>
+
+</body>
+</html>

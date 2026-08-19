@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Little Latch — Admin Dashboard</title>
+<title>Prolinker — Admin Dashboard</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23C98474'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -11,7 +11,7 @@
 
 <nav class="site-nav">
   <div class="wrap admin-shell">
-    <a href="index.html" class="nav-brand"><span class="mark"></span> Little Latch</a>
+    <a href="index.html" class="nav-brand"><span class="mark"></span> Prolinker</a>
     <div class="nav-links">
       <a href="index.html">View site ↗</a>
     </div>
@@ -22,7 +22,7 @@
   <div class="wrap admin-shell">
     <div class="eyebrow">Admin</div>
     <h1 class="site-title" style="font-size:34px;">Dashboard</h1>
-    <p class="tagline">Add posts, edit them, and link out to other pages. Changes publish straight to your live site.</p>
+    <p class="tagline">Add posts, edit them, and manage your dropdown menu columns. Changes publish straight to your live site.</p>
   </div>
 </header>
 
@@ -39,20 +39,33 @@
     <button onclick="saveConnection()">Connect</button>
     <div class="status-msg" id="connect-status"></div>
     <p style="font-size:13px;color:var(--ink-soft);margin-top:14px;">
-      Your token is stored only in this browser (localStorage) — it is never sent anywhere except directly to GitHub's own API. Don't share this admin.html link publicly, since anyone with your token can edit the repo. Need a token? Go to GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic) → check the "repo" box.
+      Your token is stored only in this browser (localStorage) — it is never sent anywhere except directly to GitHub's own API. Don't share this admin.html link publicly.
     </p>
   </div>
 
+  <div class="admin-panel" id="menu-panel" style="display:none;">
+    <h2>2 · Dropdown menu columns</h2>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:-6px;">These are the column names shown when someone clicks "Posts" in the nav bar. Posts get sorted into a column when their Category matches its name.</p>
+    <div id="menu-cols-list"></div>
+    <button class="secondary" onclick="addMenuColumn()" style="margin-top:14px;">+ Add column</button>
+    <div>
+      <button onclick="saveMenu()">Save menu columns</button>
+    </div>
+    <div class="status-msg" id="menu-status"></div>
+  </div>
+
   <div class="admin-panel" id="posts-panel" style="display:none;">
-    <h2>2 · Your posts</h2>
+    <h2>3 · Your posts</h2>
     <div id="posts-list"></div>
   </div>
 
   <div class="admin-panel" id="editor-panel" style="display:none;">
-    <h2 id="editor-heading">3 · Add a new post</h2>
+    <h2 id="editor-heading">4 · Add a new post</h2>
     <input type="hidden" id="edit-id">
     <label for="p-title">Title</label>
     <input type="text" id="p-title" placeholder="Post title">
+    <label for="p-category">Category (matches a menu column above)</label>
+    <input type="text" id="p-category" placeholder="e.g. Breastfeeding">
     <label for="p-image">Image URL (optional)</label>
     <input type="url" id="p-image" placeholder="https://...">
     <label for="p-content">Content</label>
@@ -70,7 +83,7 @@
 
 <script>
 const API = 'https://api.github.com';
-let state = { owner: '', repo: '', token: '', posts: [], sha: null };
+let state = { owner: '', repo: '', token: '', posts: [], sha: null, menuSha: null, menuColumns: [] };
 
 function loadConnection() {
   const saved = localStorage.getItem('ll_admin_conn');
@@ -80,7 +93,7 @@ function loadConnection() {
     document.getElementById('gh-repo').value = c.repo || '';
     document.getElementById('gh-token').value = c.token || '';
     state.owner = c.owner; state.repo = c.repo; state.token = c.token;
-    if (c.owner && c.repo && c.token) fetchPosts();
+    if (c.owner && c.repo && c.token) { fetchPosts(); fetchMenu(); }
   }
 }
 
@@ -90,6 +103,7 @@ function saveConnection() {
   state.token = document.getElementById('gh-token').value.trim();
   localStorage.setItem('ll_admin_conn', JSON.stringify(state));
   fetchPosts();
+  fetchMenu();
 }
 
 async function ghFetch(path, options = {}) {
@@ -128,6 +142,61 @@ async function fetchPosts() {
   }
 }
 
+async function fetchMenu() {
+  try {
+    const data = await ghFetch('/contents/menu.json');
+    state.menuSha = data.sha;
+    const content = decodeURIComponent(escape(atob(data.content)));
+    state.menuColumns = (JSON.parse(content).columns) || [];
+    document.getElementById('menu-panel').style.display = 'block';
+    renderMenuCols();
+  } catch (e) {
+    // menu.json may not exist yet on older repos - that's fine, just skip
+  }
+}
+
+function renderMenuCols() {
+  const list = document.getElementById('menu-cols-list');
+  list.innerHTML = state.menuColumns.map((col, i) => `
+    <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
+      <input type="text" value="${escapeAttr(col)}" onchange="state.menuColumns[${i}]=this.value" style="flex:1;">
+      <button class="secondary" style="padding:8px 12px;margin:0;" onclick="removeMenuColumn(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function addMenuColumn() {
+  state.menuColumns.push('New Column');
+  renderMenuCols();
+}
+function removeMenuColumn(i) {
+  state.menuColumns.splice(i, 1);
+  renderMenuCols();
+}
+
+async function saveMenu() {
+  const statusEl = document.getElementById('menu-status');
+  statusEl.textContent = 'Saving…';
+  statusEl.className = 'status-msg';
+  try {
+    const newContent = btoa(unescape(encodeURIComponent(JSON.stringify({ columns: state.menuColumns }, null, 2))));
+    const result = await ghFetch('/contents/menu.json', {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: 'Update menu columns',
+        content: newContent,
+        sha: state.menuSha
+      })
+    });
+    state.menuSha = result.content.sha;
+    statusEl.textContent = 'Saved ✓ — menu updated on your live site.';
+    statusEl.className = 'status-msg ok';
+  } catch (e) {
+    statusEl.textContent = 'Failed to save: ' + e.message;
+    statusEl.className = 'status-msg err';
+  }
+}
+
 function renderPostsList() {
   const list = document.getElementById('posts-list');
   if (!state.posts.length) {
@@ -139,7 +208,7 @@ function renderPostsList() {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map(p => `
       <div class="existing-post">
-        <span>${escapeHtml(p.title)}</span>
+        <span>${escapeHtml(p.title)} ${p.category ? `<span style="color:var(--rose);font-size:12px;">· ${escapeHtml(p.category)}</span>` : ''}</span>
         <span>
           <button class="secondary" style="margin:0 6px 0 0;padding:6px 14px;" onclick="editPost('${p.id}')">Edit</button>
           <button class="secondary" style="margin:0;padding:6px 14px;" onclick="deletePost('${p.id}')">Delete</button>
@@ -153,6 +222,7 @@ function editPost(id) {
   if (!p) return;
   document.getElementById('edit-id').value = p.id;
   document.getElementById('p-title').value = p.title;
+  document.getElementById('p-category').value = p.category || '';
   document.getElementById('p-image').value = p.image || '';
   document.getElementById('p-content').value = p.content;
   document.getElementById('p-link').value = p.link || '';
@@ -163,15 +233,17 @@ function editPost(id) {
 function resetEditor() {
   document.getElementById('edit-id').value = '';
   document.getElementById('p-title').value = '';
+  document.getElementById('p-category').value = '';
   document.getElementById('p-image').value = '';
   document.getElementById('p-content').value = '';
   document.getElementById('p-link').value = '';
-  document.getElementById('editor-heading').textContent = '3 · Add a new post';
+  document.getElementById('editor-heading').textContent = '4 · Add a new post';
 }
 
 async function savePost() {
   const id = document.getElementById('edit-id').value;
   const title = document.getElementById('p-title').value.trim();
+  const category = document.getElementById('p-category').value.trim();
   const image = document.getElementById('p-image').value.trim();
   const content = document.getElementById('p-content').value.trim();
   const link = document.getElementById('p-link').value.trim();
@@ -185,11 +257,11 @@ async function savePost() {
 
   if (id) {
     const p = state.posts.find(x => x.id === id);
-    Object.assign(p, { title, image, content, link });
+    Object.assign(p, { title, category, image, content, link });
   } else {
     state.posts.push({
       id: Date.now().toString(),
-      title, image, content, link,
+      title, category, image, content, link,
       date: new Date().toISOString().slice(0, 10)
     });
   }
@@ -242,6 +314,9 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+function escapeAttr(str) {
+  return String(str).replace(/"/g, '&quot;');
 }
 
 loadConnection();

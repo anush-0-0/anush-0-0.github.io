@@ -93,6 +93,115 @@ nav.site-nav .wrap {
 }
 .nav-links a.nav-cta:hover { background: var(--teal-dark); color: #fff; }
 
+/* Mega-menu dropdown */
+.nav-item-dropdown { position: relative; }
+.dropdown-trigger {
+  background: none;
+  border: none;
+  font-family: 'Karla', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+}
+.dropdown-trigger:hover { color: var(--teal-dark); }
+.dropdown-trigger .caret {
+  transition: transform 0.2s ease;
+  font-size: 10px;
+}
+.dropdown-trigger.open .caret { transform: rotate(180deg); }
+
+.mega-panel {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, 90vw);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease, padding 0.32s ease;
+  z-index: 30;
+}
+.mega-panel.open {
+  max-height: 420px;
+  opacity: 1;
+  padding: 28px;
+}
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px;
+}
+.mega-col-title {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  color: var(--teal-dark);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.mega-col ul { list-style: none; margin: 0; padding: 0; }
+.mega-col li { margin-bottom: 8px; }
+.mega-col a {
+  font-size: 13.5px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.mega-col a:hover { color: var(--rose); }
+.mega-col .no-posts { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+
+/* Simple content pages (About / Contact) */
+.page-hero {
+  padding: 56px 0 36px;
+  border-bottom: 1px solid var(--line);
+}
+.page-hero h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: clamp(32px, 5vw, 44px);
+  color: var(--teal-dark);
+  margin: 0 0 10px;
+}
+.content-block {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 36px;
+  margin: 40px 0;
+  box-shadow: var(--shadow-sm);
+  font-size: 16px;
+}
+.content-block h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  color: var(--teal-dark);
+  font-size: 22px;
+}
+.contact-item {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.contact-item .label {
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 90px;
+}
+
 /* Header / hero */
 header.hero {
   padding: 64px 0 44px;
@@ -237,6 +346,19 @@ main { padding: 48px 0 96px; }
   color: var(--teal-dark);
 }
 
+.comments-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.comments-heading {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--teal-dark);
+  margin-bottom: 14px;
+}
+
 .external-link {
   display: inline-flex;
   align-items: center;
@@ -260,7 +382,22 @@ main { padding: 48px 0 96px; }
   color: var(--ink-soft);
 }
 
-/* ad slots */
+/* ============================================ */
+/* AD ZONE — protective spacing, do not remove   */
+/* Enforces minimum distance from clickable      */
+/* elements per ad network policy (AdSense etc.) */
+/* ============================================ */
+.ad-zone {
+  margin: 40px 0;
+  padding: 24px 0;
+  clear: both;
+  isolation: isolate;
+}
+.ad-zone-inner {
+  pointer-events: auto;
+}
+.ad-zone * { margin: 0; }
+
 .ad-slot {
   border: 1px dashed var(--line);
   border-radius: 10px;
@@ -268,7 +405,6 @@ main { padding: 48px 0 96px; }
   text-align: center;
   font-size: 13px;
   color: var(--ink-soft);
-  margin: 32px 0;
   background: rgba(255,255,255,0.4);
 }
 

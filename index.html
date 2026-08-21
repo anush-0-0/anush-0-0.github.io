@@ -60,13 +60,25 @@
   <!-- This block must always stay: as a direct child -->
   <!-- of <main>, with no links/buttons inside it or  -->
   <!-- touching its edges. Ad network code (AdSense,  -->
-  <!-- etc.) goes INSIDE the ad-zone-inner div only.  -->
+  <!-- etc.) goes INSIDE each ad-zone-inner div only.  -->
   <!-- ============================================ -->
+
+  <!-- Zone 1: Banner ad (160x300) -->
   <div class="ad-zone">
-    <div class="ad-zone-inner ad-slot" id="ad-slot-1">
-      Ad space — connect AdSense or your ad network here
+    <div class="ad-zone-inner ad-slot ad-slot-banner" id="ad-slot-banner">
+      <!-- PASTE YOUR 160x300 BANNER AD CODE HERE, REPLACING THIS LINE -->
+      Banner ad (160×300) — paste your ad network's embed code here
     </div>
   </div>
+
+  <!-- Zone 2: Native Banner ad (blends with content, flexible width) -->
+  <div class="ad-zone">
+    <div class="ad-zone-inner ad-slot ad-slot-native" id="ad-slot-native">
+      <!-- PASTE YOUR NATIVE BANNER AD CODE HERE, REPLACING THIS LINE -->
+      Native banner ad — paste your ad network's embed code here
+    </div>
+  </div>
+
   <!-- ========== END AD ZONE — safe to resume normal edits below ========== -->
 
 </main>
@@ -83,6 +95,26 @@
     <div class="footer-fine">© 2026 Prolinker · Built with care</div>
   </div>
 </footer>
+
+<!-- ============================================ -->
+<!-- 🚫 SOCIAL BAR AD ZONE — DO NOT DELETE 🚫       -->
+<!-- Social Bar ads are usually a floating/sticky   -->
+<!-- script that injects itself automatically.      -->
+<!-- Paste your Social Bar embed script below,       -->
+<!-- replacing the placeholder comment only.         -->
+<!-- ============================================ -->
+<!-- PASTE YOUR SOCIAL BAR AD SCRIPT HERE -->
+<!-- ========== END SOCIAL BAR AD ZONE ========== -->
+
+<!-- ============================================ -->
+<!-- 🚫 POPUNDER AD ZONE — DO NOT DELETE 🚫         -->
+<!-- Popunder ads are a script that fires on click  -->
+<!-- anywhere on the page, opening a new tab/window.-->
+<!-- Paste your Popunder embed script below,         -->
+<!-- replacing the placeholder comment only.         -->
+<!-- ============================================ -->
+<!-- PASTE YOUR POPUNDER AD SCRIPT HERE -->
+<!-- ========== END POPUNDER AD ZONE ========== -->
 
 <script>
 let allPosts = [];
@@ -186,6 +218,7 @@ function loadCusdisScript() {
   script.id = 'cusdis-script';
   script.async = true;
   script.defer = true;
+  script.type = 'module';
   script.src = 'https://cusdis.com/js/cusdis.es.js';
   document.body.appendChild(script);
 }

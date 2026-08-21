@@ -1,510 +1,259 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;700&display=swap');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prolinker — A Breastfeeding & New Mom Journal</title>
+<meta name="description" content="Gentle, practical guidance for breastfeeding and early motherhood.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23C98474'/%3E%3C/svg%3E">
+<meta property="og:title" content="Prolinker — A Breastfeeding & New Mom Journal">
+<meta property="og:description" content="Gentle, practical guidance for breastfeeding and early motherhood.">
+<link rel="stylesheet" href="style.css">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z2GQJ0Y7R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7Z2GQJ0Y7R');
+</script>
+</head>
+<body>
 
-:root {
-  --sand: #F0EBE1;
-  --teal: #3A5A54;
-  --teal-dark: #294540;
-  --rose: #C98474;
-  --rose-light: #E8B8AB;
-  --ink: #2E2B26;
-  --ink-soft: #6B6459;
-  --line: #DCD4C6;
-  --card: #FAF7F1;
-  --radius: 14px;
-  --shadow-sm: 0 1px 2px rgba(41,69,64,0.06), 0 1px 1px rgba(41,69,64,0.04);
-  --shadow-md: 0 4px 16px rgba(41,69,64,0.08), 0 2px 6px rgba(41,69,64,0.05);
-  --shadow-lg: 0 12px 32px rgba(41,69,64,0.12), 0 4px 12px rgba(41,69,64,0.06);
-}
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-brand"><span class="mark"></span> Prolinker</a>
+    <div class="nav-links">
+      <div class="nav-item-dropdown">
+        <button class="dropdown-trigger" id="posts-trigger" onclick="toggleMenu()">
+          Posts <span class="caret">▾</span>
+        </button>
+        <div class="mega-panel" id="mega-panel">
+          <div class="mega-grid" id="mega-grid">
+            <div class="mega-col"><span class="no-posts">Loading…</span></div>
+          </div>
+        </div>
+      </div>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+  </div>
+</nav>
 
-* { box-sizing: border-box; }
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">A journal for new mothers</div>
+    <h1 class="site-title">Prolinker</h1>
+    <p class="tagline">Gentle, honest guidance on breastfeeding, newborn days, and everything nobody tells you the first time around.</p>
+    <svg class="wave-divider" viewBox="0 0 300 24" preserveAspectRatio="none">
+      <path d="M0 12 Q 25 2, 50 12 T 100 12 T 150 12 T 200 12 T 250 12 T 300 12" />
+    </svg>
+    <div class="author-strip">
+      <div class="author-avatar"></div>
+      <div>
+        <div class="name">Written by a mom, for moms</div>
+        <div class="role">Real experience, no fluff</div>
+      </div>
+    </div>
+  </div>
+</header>
 
-html { scroll-behavior: smooth; }
+<main class="wrap" id="posts">
+  <!-- ============================================ -->
+  <!-- 🚫 AD ZONE — DO NOT MOVE, NEST, OR DELETE 🚫  -->
+  <!-- This block must always stay: as a direct child -->
+  <!-- of <main>, with no links/buttons inside it or  -->
+  <!-- touching its edges. Ad network code (AdSense,  -->
+  <!-- etc.) goes INSIDE each ad-zone-inner div only.  -->
+  <!-- ============================================ -->
 
-body {
-  margin: 0;
-  background: var(--sand);
-  background-image: radial-gradient(circle at 100% 0%, rgba(201,132,116,0.06) 0%, transparent 45%);
-  color: var(--ink);
-  font-family: 'Karla', sans-serif;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+  <!-- Zone 1: Banner ad (160x300) -->
+  <div class="ad-zone">
+    <div class="ad-zone-inner ad-slot ad-slot-banner" id="ad-slot-banner">
+      <script>
+        atOptions = {
+          'key' : '6c7229afb8256720714c8e6d2159c1d9',
+          'format' : 'iframe',
+          'height' : 300,
+          'width' : 160,
+          'params' : {}
+        };
+      </script>
+      <script src="https://www.highrevenueformat.com/6c7229afb8256720714c8e6d2159c1d9/invoke.js"></script>
+    </div>
+  </div>
 
-a { color: var(--teal-dark); transition: color 0.15s ease; }
+  <!-- Zone 2: Native Banner ad (blends with content, flexible width) -->
+  <div class="ad-zone">
+    <div class="ad-zone-inner ad-slot ad-slot-native" id="ad-slot-native">
+      <script async="async" data-cfasync="false" src="https://pl30960766.profitableratecpmnetwork.com/ceaa9a925d9863b25d567a19be818428/invoke.js"></script>
+      <div id="container-ceaa9a925d9863b25d567a19be818428"></div>
+    </div>
+  </div>
 
-::selection { background: var(--rose-light); color: var(--teal-dark); }
+  <!-- ========== END AD ZONE — safe to resume normal edits below ========== -->
 
-.wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+  <div id="posts-container">
+    <div class="empty-state">Loading posts…</div>
+  </div>
 
-/* Top nav */
-nav.site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(240,235,225,0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-nav.site-nav .wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-.nav-brand {
-  font-family: 'Fraunces', serif;
-  font-weight: 600;
-  font-size: 19px;
-  color: var(--teal-dark);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.nav-brand .mark {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: var(--rose);
-  display: inline-block;
-}
-.nav-links {
-  display: flex;
-  gap: 28px;
-  align-items: center;
-}
-.nav-links a {
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  color: var(--ink-soft);
-}
-.nav-links a:hover { color: var(--teal-dark); }
-.nav-links a.nav-cta {
-  background: var(--teal);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 999px;
-}
-.nav-links a.nav-cta:hover { background: var(--teal-dark); color: #fff; }
+</main>
 
-/* Mega-menu dropdown */
-.nav-item-dropdown { position: relative; }
-.dropdown-trigger {
-  background: none;
-  border: none;
-  font-family: 'Karla', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink-soft);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0;
-}
-.dropdown-trigger:hover { color: var(--teal-dark); }
-.dropdown-trigger .caret {
-  transition: transform 0.2s ease;
-  font-size: 10px;
-}
-.dropdown-trigger.open .caret { transform: rotate(180deg); }
+<footer id="about">
+  <div class="wrap">
+    <div class="footer-brand">Prolinker</div>
+    <p class="footer-tag">A gentle corner of the internet for new mothers navigating breastfeeding, sleepless nights, and everything in between.</p>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-fine">© 2026 Prolinker · Built with care</div>
+  </div>
+</footer>
 
-.mega-panel {
-  position: absolute;
-  top: calc(100% + 16px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(680px, 90vw);
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: 0;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease, padding 0.32s ease;
-  z-index: 30;
-}
-.mega-panel.open {
-  max-height: 420px;
-  opacity: 1;
-  padding: 28px;
-}
-.mega-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 24px;
-}
-.mega-col-title {
-  font-family: 'Fraunces', serif;
-  font-size: 15px;
-  color: var(--teal-dark);
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--line);
-}
-.mega-col ul { list-style: none; margin: 0; padding: 0; }
-.mega-col li { margin-bottom: 8px; }
-.mega-col a {
-  font-size: 13.5px;
-  text-decoration: none;
-  color: var(--ink);
-}
-.mega-col a:hover { color: var(--rose); }
-.mega-col .no-posts { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+<!-- ============================================ -->
+<!-- 🚫 SOCIAL BAR AD ZONE — DO NOT DELETE 🚫       -->
+<!-- Social Bar ads are usually a floating/sticky   -->
+<!-- script that injects itself automatically.      -->
+<!-- Paste your Social Bar embed script below,       -->
+<!-- replacing the placeholder comment only.         -->
+<!-- ============================================ -->
+<!-- PASTE YOUR SOCIAL BAR AD SCRIPT HERE -->
+<script src="https://pl30960767.profitableratecpmnetwork.com/54/6d/6f/546d6ff66083f040a7fff6e1f495f9d8.js"></script>
+<!-- ========== END SOCIAL BAR AD ZONE ========== -->
 
-/* Simple content pages (About / Contact) */
-.page-hero {
-  padding: 56px 0 36px;
-  border-bottom: 1px solid var(--line);
-}
-.page-hero h1 {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: clamp(32px, 5vw, 44px);
-  color: var(--teal-dark);
-  margin: 0 0 10px;
-}
-.content-block {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 36px;
-  margin: 40px 0;
-  box-shadow: var(--shadow-sm);
-  font-size: 16px;
-}
-.content-block h2 {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  color: var(--teal-dark);
-  font-size: 22px;
-}
-.contact-item {
-  display: flex;
-  gap: 12px;
-  align-items: baseline;
-  margin-bottom: 14px;
-}
-.contact-item .label {
-  font-weight: 700;
-  color: var(--ink-soft);
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  min-width: 90px;
+<!-- ============================================ -->
+<!-- 🚫 POPUNDER AD ZONE — DO NOT DELETE 🚫         -->
+<!-- Popunder ads are a script that fires on click  -->
+<!-- anywhere on the page, opening a new tab/window.-->
+<!-- Paste your Popunder embed script below,         -->
+<!-- replacing the placeholder comment only.         -->
+<!-- ============================================ -->
+<!-- PASTE YOUR POPUNDER AD SCRIPT HERE -->
+<!-- ========== END POPUNDER AD ZONE ========== -->
+
+<script>
+let allPosts = [];
+let menuColumns = [];
+
+async function loadPosts() {
+  const container = document.getElementById('posts-container');
+  try {
+    const res = await fetch('posts.json?_=' + Date.now());
+    allPosts = await res.json();
+
+    if (!allPosts.length) {
+      container.innerHTML = '<div class="empty-state">No posts yet. Check back soon.</div>';
+      return;
+    }
+
+    allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    container.innerHTML = allPosts.map(post => {
+      const words = post.content.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(words / 200));
+      const pageUrl = window.location.origin + window.location.pathname + '#post-' + post.id;
+      return `
+      <article class="post-card" id="post-${post.id}">
+        <div class="post-meta-row">
+          <div class="post-date">${new Date(post.date).toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})}</div>
+          <div class="read-time">${minutes} min read</div>
+        </div>
+        <h2>${escapeHtml(post.title)}</h2>
+        ${post.image ? `<img src="${escapeAttr(post.image)}" alt="${escapeAttr(post.title)}">` : ''}
+        <div class="post-content">${escapeHtml(post.content)}</div>
+        ${post.link ? `<a class="external-link" href="${escapeAttr(post.link)}" target="_blank" rel="noopener">Read more →</a>` : ''}
+        <div class="comments-section">
+          <div class="comments-heading">Comments</div>
+          <div id="cusdis_thread_${post.id}"
+            class="cusdis_thread"
+            data-host="https://cusdis.com"
+            data-app-id="220872d4-16ab-43e8-8e25-95d923b3f465"
+            data-page-id="${post.id}"
+            data-page-url="${escapeAttr(pageUrl)}"
+            data-page-title="${escapeAttr(post.title)}"
+          ></div>
+        </div>
+      </article>
+    `;
+    }).join('');
+    loadCusdisScript();
+  } catch (e) {
+    container.innerHTML = '<div class="empty-state">Could not load posts yet.</div>';
+  }
+  buildMegaMenu();
 }
 
-/* Header / hero */
-header.hero {
-  padding: 64px 0 44px;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-  overflow: hidden;
+async function loadMenu() {
+  try {
+    const res = await fetch('menu.json?_=' + Date.now());
+    const data = await res.json();
+    menuColumns = data.columns || [];
+  } catch (e) {
+    menuColumns = ["Latest"];
+  }
 }
 
-.eyebrow {
-  font-family: 'Karla', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 12px;
-  color: var(--rose);
-  margin-bottom: 14px;
+function buildMegaMenu() {
+  const grid = document.getElementById('mega-grid');
+  grid.innerHTML = menuColumns.map(col => {
+    let matches;
+    if (col.toLowerCase() === 'latest') {
+      matches = allPosts.slice(0, 5);
+    } else {
+      matches = allPosts.filter(p => (p.category || '').toLowerCase() === col.toLowerCase());
+    }
+    return `
+      <div class="mega-col">
+        <div class="mega-col-title">${escapeHtml(col)}</div>
+        ${matches.length
+          ? `<ul>${matches.map(p => `<li><a href="index.html#post-${p.id}" onclick="closeMenu()">${escapeHtml(p.title)}</a></li>`).join('')}</ul>`
+          : `<span class="no-posts">No posts yet</span>`}
+      </div>
+    `;
+  }).join('');
 }
 
-h1.site-title {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: clamp(36px, 6vw, 56px);
-  margin: 0 0 12px;
-  color: var(--teal-dark);
-  letter-spacing: -0.01em;
+function toggleMenu() {
+  document.getElementById('mega-panel').classList.toggle('open');
+  document.getElementById('posts-trigger').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('mega-panel').classList.remove('open');
+  document.getElementById('posts-trigger').classList.remove('open');
+}
+document.addEventListener('click', (e) => {
+  const dropdown = document.querySelector('.nav-item-dropdown');
+  if (!dropdown.contains(e.target)) closeMenu();
+});
+
+function loadCusdisScript() {
+  const existing = document.getElementById('cusdis-script');
+  if (existing) existing.remove();
+  const script = document.createElement('script');
+  script.id = 'cusdis-script';
+  script.async = true;
+  script.defer = true;
+  script.type = 'module';
+  script.src = 'https://cusdis.com/js/cusdis.es.js';
+  document.body.appendChild(script);
 }
 
-.tagline {
-  font-size: 18px;
-  color: var(--ink-soft);
-  max-width: 46ch;
-  margin: 0;
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+function escapeAttr(str) {
+  return String(str).replace(/"/g, '&quot;');
 }
 
-/* Signature wave divider - represents flow/nurturing */
-.wave-divider {
-  width: 100%;
-  height: 28px;
-  margin: 8px 0 0;
-  display: block;
-}
-.wave-divider path {
-  fill: none;
-  stroke: var(--rose);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
+(async function init() {
+  await loadMenu();
+  await loadPosts();
+})();
+</script>
 
-/* Author strip */
-.author-strip {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 28px;
-}
-.author-avatar {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--rose), var(--teal));
-  flex-shrink: 0;
-}
-.author-strip .name {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--ink);
-}
-.author-strip .role {
-  font-size: 13px;
-  color: var(--ink-soft);
-}
-
-/* Posts */
-main { padding: 48px 0 96px; }
-
-.post-card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 32px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-.post-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.post-meta-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.post-date {
-  font-size: 13px;
-  color: var(--ink-soft);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.read-time {
-  font-size: 12px;
-  color: var(--rose);
-  font-weight: 700;
-  background: rgba(201,132,116,0.12);
-  padding: 3px 10px;
-  border-radius: 999px;
-}
-
-.post-card h2 {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: 28px;
-  margin: 0 0 14px;
-  color: var(--ink);
-  line-height: 1.2;
-}
-
-.post-card img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 18px;
-  display: block;
-  box-shadow: var(--shadow-sm);
-}
-
-.post-content {
-  font-size: 16.5px;
-  color: var(--ink);
-  white-space: pre-line;
-}
-
-.post-content h1, .post-content h2, .post-content h3 {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  color: var(--teal-dark);
-}
-
-.comments-section {
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.comments-heading {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: 17px;
-  color: var(--teal-dark);
-  margin-bottom: 14px;
-}
-
-.external-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 18px;
-  padding: 10px 20px;
-  background: var(--teal);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 14px;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-.external-link:hover { background: var(--teal-dark); transform: translateX(2px); }
-
-.empty-state {
-  text-align: center;
-  padding: 64px 24px;
-  color: var(--ink-soft);
-}
-
-/* ============================================ */
-/* AD ZONE — protective spacing, do not remove   */
-/* Enforces minimum distance from clickable      */
-/* elements per ad network policy (AdSense etc.) */
-/* ============================================ */
-.ad-zone {
-  margin: 40px 0;
-  padding: 24px 0;
-  clear: both;
-  isolation: isolate;
-}
-.ad-zone-inner {
-  pointer-events: auto;
-}
-.ad-zone * { margin: 0; }
-
-.ad-slot {
-  border: 1px dashed var(--line);
-  border-radius: 10px;
-  padding: 18px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--ink-soft);
-  background: rgba(255,255,255,0.4);
-}
-
-footer {
-  border-top: 1px solid var(--line);
-  padding: 40px 0;
-  color: var(--ink-soft);
-  text-align: center;
-}
-.footer-brand {
-  font-family: 'Fraunces', serif;
-  color: var(--teal-dark);
-  font-size: 17px;
-  margin-bottom: 8px;
-}
-.footer-tag {
-  font-size: 13px;
-  max-width: 40ch;
-  margin: 0 auto 18px;
-}
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 16px;
-}
-.footer-links a {
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  color: var(--ink-soft);
-}
-.footer-links a:hover { color: var(--teal-dark); }
-.footer-fine {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-/* Admin dashboard specific */
-.admin-shell { max-width: 640px; }
-.admin-panel {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px;
-  margin-bottom: 24px;
-}
-.admin-panel h2 {
-  font-family: 'Fraunces', serif;
-  font-size: 20px;
-  margin: 0 0 16px;
-  color: var(--teal-dark);
-}
-label {
-  display: block;
-  font-weight: 700;
-  font-size: 13px;
-  margin: 14px 0 6px;
-  color: var(--ink-soft);
-}
-input[type=text], input[type=password], input[type=url], textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  font-family: 'Karla', sans-serif;
-  font-size: 15px;
-  background: #fff;
-}
-textarea { min-height: 160px; resize: vertical; }
-button {
-  margin-top: 18px;
-  padding: 11px 22px;
-  background: var(--teal);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-}
-button:hover { background: var(--teal-dark); }
-button.secondary {
-  background: transparent;
-  color: var(--rose);
-  border: 1px solid var(--rose);
-}
-button.secondary:hover { background: var(--rose); color: #fff; }
-.status-msg {
-  margin-top: 14px;
-  font-size: 14px;
-  font-weight: 700;
-}
-.status-msg.ok { color: var(--teal-dark); }
-.status-msg.err { color: #B3453D; }
-.existing-post {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-}
-.existing-post:last-child { border-bottom: none; }
+</body>
+</html>

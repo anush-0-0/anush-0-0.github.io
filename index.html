@@ -9,11 +9,28 @@
 <meta property="og:title" content="Prolinker — A Breastfeeding & New Mom Journal">
 <meta property="og:description" content="Gentle, practical guidance for breastfeeding and early motherhood.">
 <link rel="stylesheet" href="style.css">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z2GQJ0Y7R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7Z2GQJ0Y7R');
+</script>
 </head>
 <body>
 
+<div class="utility-bar">
+  <div class="wrap-wide utility-inner">
+    <form class="search-form" onsubmit="return doSearch(event)">
+      <input type="text" id="search-input" placeholder="Search the journal…">
+      <button type="submit" aria-label="Search">🔍</button>
+    </form>
+  </div>
+</div>
+
 <nav class="site-nav">
-  <div class="wrap">
+  <div class="wrap-wide">
     <a href="index.html" class="nav-brand"><span class="mark"></span> Prolinker</a>
     <div class="nav-links">
       <div class="nav-item-dropdown">
@@ -33,7 +50,7 @@
 </nav>
 
 <header class="hero">
-  <div class="wrap">
+  <div class="wrap-wide">
     <div class="eyebrow">A journal for new mothers</div>
     <h1 class="site-title">Prolinker</h1>
     <p class="tagline">Gentle, honest guidance on breastfeeding, newborn days, and everything nobody tells you the first time around.</p>
@@ -50,49 +67,74 @@
   </div>
 </header>
 
-<main class="wrap" id="posts">
-  <div id="posts-container">
-    <div class="empty-state">Loading posts…</div>
-  </div>
+<main class="wrap-wide content-grid" id="posts">
+  <div class="content-main">
 
-  <!-- ============================================ -->
-  <!-- 🚫 AD ZONE — DO NOT MOVE, NEST, OR DELETE 🚫  -->
-  <!-- This block must always stay: as a direct child -->
-  <!-- of <main>, with no links/buttons inside it or  -->
-  <!-- touching its edges. Ad network code (AdSense,  -->
-  <!-- etc.) goes INSIDE each ad-zone-inner div only.  -->
-  <!-- ============================================ -->
+    <!-- ============================================ -->
+    <!-- 🚫 AD ZONE — DO NOT MOVE, NEST, OR DELETE 🚫  -->
+    <!-- This block must always stay: as a direct child -->
+    <!-- of .content-main, with no links/buttons inside -->
+    <!-- it or touching its edges. Ad network code goes -->
+    <!-- INSIDE each ad-zone-inner div only.            -->
+    <!-- ============================================ -->
 
-  <!-- Zone 1: Banner ad (160x300) -->
-  <div class="ad-zone">
-    <div class="ad-zone-inner ad-slot ad-slot-banner" id="ad-slot-banner">
-      <script>
-        atOptions = {
-          'key' : '6c7229afb8256720714c8e6d2159c1d9',
-          'format' : 'iframe',
-          'height' : 300,
-          'width' : 160,
-          'params' : {}
-        };
-      </script>
-      <script src="https://www.highrevenueformat.com/6c7229afb8256720714c8e6d2159c1d9/invoke.js"></script>
+    <!-- Zone 1: Banner ad (160x300) -->
+    <div class="ad-zone">
+      <div class="ad-zone-inner ad-slot ad-slot-banner" id="ad-slot-banner">
+        <script>
+          atOptions = {
+            'key' : '6c7229afb8256720714c8e6d2159c1d9',
+            'format' : 'iframe',
+            'height' : 300,
+            'width' : 160,
+            'params' : {}
+          };
+        </script>
+        <script src="https://www.highrevenueformat.com/6c7229afb8256720714c8e6d2159c1d9/invoke.js"></script>
+      </div>
     </div>
-  </div>
 
-  <!-- Zone 2: Native Banner ad (blends with content, flexible width) -->
-  <div class="ad-zone">
-    <div class="ad-zone-inner ad-slot ad-slot-native" id="ad-slot-native">
-      <script async="async" data-cfasync="false" src="https://pl30960766.profitableratecpmnetwork.com/ceaa9a925d9863b25d567a19be818428/invoke.js"></script>
-      <div id="container-ceaa9a925d9863b25d567a19be818428"></div>
+    <!-- Zone 2: Native Banner ad (blends with content, flexible width) -->
+    <div class="ad-zone">
+      <div class="ad-zone-inner ad-slot ad-slot-native" id="ad-slot-native">
+        <script async="async" data-cfasync="false" src="https://pl30960766.profitableratecpmnetwork.com/ceaa9a925d9863b25d567a19be818428/invoke.js"></script>
+        <div id="container-ceaa9a925d9863b25d567a19be818428"></div>
+      </div>
     </div>
+
+    <!-- ========== END AD ZONE — safe to resume normal edits below ========== -->
+
+    <div id="posts-container">
+      <div class="empty-state">Loading posts…</div>
+    </div>
+
   </div>
 
-  <!-- ========== END AD ZONE — safe to resume normal edits below ========== -->
+  <aside class="sidebar">
+    <div class="sidebar-box">
+      <div class="sidebar-title">Newsletter</div>
+      <p class="sidebar-text">Gentle guidance delivered to your inbox — no spam, just support.</p>
+      <form class="newsletter-form" onsubmit="return handleNewsletter(event)">
+        <input type="email" placeholder="Your email" required>
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
 
+    <div class="sidebar-box" id="topics-box">
+      <div class="sidebar-title">Topics</div>
+      <div class="topics-cloud" id="topics-cloud">
+        <span class="topic-tag">Breastfeeding</span>
+        <span class="topic-tag">Newborn Care</span>
+        <span class="topic-tag">Self Care</span>
+        <span class="topic-tag">Sleep</span>
+        <span class="topic-tag">Postpartum</span>
+      </div>
+    </div>
+  </aside>
 </main>
 
 <footer id="about">
-  <div class="wrap">
+  <div class="wrap-wide">
     <div class="footer-brand">Prolinker</div>
     <p class="footer-tag">A gentle corner of the internet for new mothers navigating breastfeeding, sleepless nights, and everything in between.</p>
     <div class="footer-links">
@@ -239,6 +281,24 @@ function escapeHtml(str) {
 }
 function escapeAttr(str) {
   return String(str).replace(/"/g, '&quot;');
+}
+
+function doSearch(e) {
+  e.preventDefault();
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!q) return false;
+  document.querySelectorAll('.post-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q) ? '' : 'none';
+  });
+  return false;
+}
+
+function handleNewsletter(e) {
+  e.preventDefault();
+  alert('Thanks for signing up! (Connect this form to Mailchimp, ConvertKit, or similar to actually collect emails.)');
+  e.target.reset();
+  return false;
 }
 
 (async function init() {

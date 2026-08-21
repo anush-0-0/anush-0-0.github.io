@@ -5,8 +5,8 @@ This file exists so future design changes never accidentally break ad monetizati
 ## The rule
 Your site has 4 ad zones, all in `index.html`, each wrapped in a clearly commented block:
 
-1. `#ad-slot-banner` — Banner ad (160×300), inside `<main>`
-2. `#ad-slot-native` — Native Banner ad, inside `<main>`
+1. `#ad-slot-banner` — Banner ad (160×300), inside `<main>`, positioned above the posts list
+2. `#ad-slot-native` — Native Banner ad, inside `<main>`, positioned above the posts list
 3. Social Bar zone — a script placeholder right after `</footer>`
 4. Popunder zone — a script placeholder right after the Social Bar zone
 
